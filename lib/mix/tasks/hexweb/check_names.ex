@@ -12,7 +12,7 @@ defmodule Mix.Tasks.Hexweb.CheckNames do
     threshold
     |> find_candidates
     |> HexWeb.Email.typosquat_candidates(threshold)
-    |> HexWeb.Mailer.deliver_now
+    |> HexWeb.Sender.deliver_now
 
     :ok
   end

@@ -29,7 +29,7 @@ defmodule HexWeb.Users do
 
     case Repo.transaction(multi) do
       {:ok, %{user: %{emails: [email]} = user}} ->
-        Mail.verification(user, email) |> Mailer.deliver_now
+        Mail.verification(user, email) |> Email.Sender.deliver_now
         {:ok, user}
       {:error, :user, changeset, _} ->
         {:error, changeset}
@@ -99,7 +99,8 @@ defmodule HexWeb.Users do
       user
       |> with_emails
       |> Email.password_reset_request
-      |> Mailer.deliver_now
+      |> Email.Sender.deliver_now
+
       :ok
     else
       {:error, :not_found}
@@ -136,7 +137,6 @@ defmodule HexWeb.Users do
     case Repo.transaction(multi) do
       {:ok, %{email: email}} ->
         user = with_emails(%{user | emails: %Ecto.Association.NotLoaded{}})
-        Mail.verification(user, email) |> Mailer.deliver_now
         {:ok, user}
       {:error, :email, changeset, _} ->
         {:error, changeset}
@@ -237,7 +237,7 @@ defmodule HexWeb.Users do
       email.verified ->
         {:error, :already_verified}
       true ->
-        Mail.verification(user, email) |> Mailer.deliver_now
+        Mail.verification(user, email) |> Email.Sender.deliver_now
         :ok
     end
   end
