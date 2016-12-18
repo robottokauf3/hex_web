@@ -98,7 +98,7 @@ defmodule HexWeb.Users do
 
       user
       |> with_emails
-      |> Email.password_reset_request
+      |> Mail.password_reset_request
       |> Email.Sender.deliver_now
 
       :ok
